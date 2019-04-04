@@ -1,26 +1,22 @@
-# AVRS-MQP
+# ABB-IRB-1600: Template ROS-I catkin_ws
+A simple template for getting started using ROS-I with WPI'S ABB-IRB-1600 Robotic arm. 
 
-Automatic Vehicle Recharging Station (AVRS)
+Has a fixes for URDf and launch files that the main ROS-I experimental branch doesn't have.
 
-In the future when levle 5 autonomous vehicles exist, solutions will be needed to automate charging in order to create systems completely independent from human operation. 
-
-This Major Qualifying Project (MQP) aims to design, manufacure, and program such a system capable of opening the charging port flap and charging vehicle of different charging port types. 
-
-Advisors: Craig Putnam, Jie Fu
-Students: Matthew Fortmeyer, Nikolas Gamarra, Ryan O’Brien, Jacob Remz
+Has Action client/server ROS packages for bridging Python and C++ enabling Python to be used for high levle control decisions. 
 
 
 ## ROS packages/nodes and launch files
 
 - master.launch
-This is the most complete launch file. the arg "sim:=true" can be added if not connecting to the robot. 
-
-Currently launchs Kinect drivers, ROS-I, static Frame transofrmations, point cloud filtering,
-
+A place to launch multiple launch files
 ```
 roslaunch master_launcher master.launch
+
 ```
-roslaunch master_launcher secondary_master.launch
+
+- static_TFs.launch
+A place to put static TFs
 
 
 - ROS-I
@@ -31,7 +27,7 @@ roslaunch abb_irb1600_6_12_moveit_config moveit_planning_execution.launch sim:=f
 ```
 
 - motion_server
-This node recives action messages from the action client and sends motion requests to the ROS-I stack using move_group
+This node recives action messages from the action client and sends motion requests to the ROS-I stack using move_group. Only needed if you wanto to use Python for planning
 ```
 roslaunch motion_server motion_server.launch 
 ```
@@ -41,20 +37,6 @@ This node is the main controll node written in python.  When in normal operation
 
 ```
 roslaunch motion_planning_client motion_client.launch 
-```
-
-- point_cloud_processing
-Masages point cloud data (leafs,crops,removes outliers). 
-
-```
-roslaunch point_cloud_processing point_cloud_processing.launch 
-```
-
-- point_cloud_processing_experimental
-A playground for rapidly prototpying new point cloud filtering and interpretation.
-
-```
-roslaunch point_cloud_processing_experimental point_cloudv3.launch 
 ```
 
 - master_launcher
@@ -73,9 +55,10 @@ to visualize the robot run
 
 roslaunch abb_irb1600_6_12_moveit_config moveit_planning_execution.launch sim:=false robot_ip:=192.168.100.100
 
+This setup assistant helps you configure you URDF and must be launched and used to auto generate files after changing your URDF:
 roslaunch moveit_setup_assistant setup_assistant.launch
 
-roslaunch master_launcher simple_kinect.launch 
+
 
 ```
 
@@ -85,28 +68,13 @@ roslaunch master_launcher simple_kinect.launch
 ## Depends on
 
 ROS-I
-PCL
-Open CV
 MoveIt
 TRAC-IK Kinematics Solver
 http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/trac_ik/trac_ik_tutorial.html
 
-
-To clone with all dependend submodules
-git clone URL
-cd FOLDER
-git submodule init
-git submodule update
-
-
-
-rosparam set cv_camera/device_id 0
-rosrun cv_camera cv_camera_node
-
-
-rm -r ~/Arduino/libraries/ros_lib
-rosrun rosserial_client make_libraries ~/Arduino/libraries
-
+Recommended 
+PCL
+Open CV
 
 
 
